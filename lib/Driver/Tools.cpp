@@ -7979,12 +7979,15 @@ void gnutools::CXXAMPLink::ConstructJob(Compilation &C, const JobAction &JA,
       LinkerArgString.append("hawaii");
     } else if (AMDGPUTarget.equals("AMD:AMDGPU:8:0:1")) {
       LinkerArgString.append("carrizo");
+    } else if (AMDGPUTarget.equals("AMD:AMDGPU:8:0:2")) {
+      LinkerArgString.append("tonga");
     } else if (AMDGPUTarget.equals("AMD:AMDGPU:8:0:3")) {
       LinkerArgString.append("fiji");
     } else if (AMDGPUTarget.equals("fiji") ||
                AMDGPUTarget.equals("kaveri") ||
                AMDGPUTarget.equals("carrizo") ||
-               AMDGPUTarget.equals("hawaii")) {
+               AMDGPUTarget.equals("hawaii") ||
+               AMDGPUTarget.equals("tonga")) {
       // directly use GPU family
       LinkerArgString.append(AMDGPUTarget);
     } else {
@@ -7994,9 +7997,9 @@ void gnutools::CXXAMPLink::ConstructJob(Compilation &C, const JobAction &JA,
     if (FoundAMDGPUTarget) {
       CmdArgs.push_back(Args.MakeArgString(LinkerArgString));
     } else {
-      // ignore invalid AMDGPU target, use auto
+      // ignore invalid AMDGPU target, use fiji
       C.getDriver().Diag(diag::warn_amdgpu_target_invalid) << AMDGPUTarget;
-      CmdArgs.push_back("--amdgpu-target=auto");
+      CmdArgs.push_back("--amdgpu-target=fiji");
     }
   }
 
